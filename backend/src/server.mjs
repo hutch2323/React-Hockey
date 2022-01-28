@@ -41,7 +41,8 @@ app.post('/api/addMovie', async (req, res) => {
         await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors, poster:req.body.poster, rating:req.body.rating});
 
         // console.log(movieInfo);
-        res.status(200).json({message:"Success"});
+        const movieInfo = await db.collection('movies').find({}).toArray();
+        res.status(200).json({message:"Success", movies: movieInfo});
         client.close();
     }
     catch (error) {
@@ -55,6 +56,8 @@ app.post('/api/removeMovie', async (req, res) => {
     // req.params.name
     // console.log(req.params.name);
     try{
+        console.log("We're in the removeMovie API")
+        console.log(req.body.name);
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
         const db = client.db("movies");
 
@@ -63,7 +66,8 @@ app.post('/api/removeMovie', async (req, res) => {
         console.log(returnVal);
 
         if (returnVal.deletedCount == 1){
-            res.status(200).json({message: `Movie ${req.body.name} deleted`});
+            const movieInfo = await db.collection('movies').find({}).toArray();
+            res.status(200).json({message: `Movie ${req.body.name} deleted`, movies: movieInfo});
         } else {
             res.status(200).json({message: "Unable to delete movie"});
         }
@@ -72,7 +76,7 @@ app.post('/api/removeMovie', async (req, res) => {
         client.close();
     }
     catch (error) {
-        res.status(500).json({message: "Error connceting to db", error});
+        res.status(500).json({message: "Error connceting to db"});
     }
 })
 

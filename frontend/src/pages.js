@@ -45,9 +45,23 @@ export function Home({movies, setMovies}){
             <MovieList 
                 movies={movies} 
                 onRemoveMovie = {
-                    movieName => {
-                        const newMovies = movies.filter(movie => movie.name !== movieName);
-                        setMovies(newMovies);
+                    movieName => {                        
+                        console.log(movieName);
+                        const removeMovie = async () =>{
+                            const result = await fetch('/api/removeMovie', {
+                                method: "post",
+                                body: JSON.stringify({name: movieName}),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                }
+                            });
+                            const body = await result.json();
+                            console.log(body);
+                            if (body.message !== "Unable to delete movie"){
+                                setMovies(body.movies);
+                            }
+                        }
+                        removeMovie();                                         
                     }
                 } 
             />
@@ -64,17 +78,33 @@ export function AddReview({movies, setMovies}){
             </div>
             <AddReviewForm
                 onNewReview={(name, date, actors, poster, rating) => {
-                    const newReviews = [
-                    ...movies,
-                        {
-                            name,
-                            date,
-                            actors,
-                            poster,
-                            rating
+                    // const newReviews = [
+                    // ...movies,
+                    //     {
+                    //         name,
+                    //         date,
+                    //         actors,
+                    //         poster,
+                    //         rating
+                    //     }
+                    // ];
+                    // setMovies(newReviews);
+                    console.log(name);
+                    const removeMovie = async () =>{
+                        const result = await fetch('/api/addMovie', {
+                            method: "post",
+                            body: JSON.stringify({name, date, actors, poster, rating}),
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+                        const body = await result.json();
+                        console.log(body);
+                        if (body.message == "Success"){
+                            setMovies(body.movies);
                         }
-                    ];
-                    setMovies(newReviews);
+                    }
+                    removeMovie();   
                 }}
             />
         </>
