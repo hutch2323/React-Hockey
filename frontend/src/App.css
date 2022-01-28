@@ -1,0 +1,159 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+#firstLink {
+  border-right: 3px solid white;
+  
+}
+
+.card {
+  border: 1px solid rgba(0, 0, 0)
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 991px) {
+  #firstLink {
+    border-right: 0px
+  }
+
+  #navContainer {
+    justify-content: center;
+  }
+}
+
+/* @media (max-width: 767px) {
+  img.p-3{
+    width:50%
+  }
+} */
+
+@media (max-width: 550px) {
+  #logo {
+    width:100%
+  }
+
+  /* img.p-3 {
+    width:80%;
+  } */
+}
+
+@media (min-width: 550px){
+  .col-md-4 {
+    flex: 0 0 auto;
+    width: 33.33333333% !important;
+  }
+
+  .col-md-8 {
+    flex: 0 0 auto;
+    width: 66.66666667% !important;
+  }
+
+  .row>* {
+    flex-shrink: 0;
+    /* width: auto; */
+    max-width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-top: var(--bs-gutter-y);
+  }
+}
+
+@media (max-width: 600px){
+  .card-body{
+    padding-left:0px !important;
+    padding-right:0px !important;
+  }
+
+  #actors{
+    padding-left:.5rem !important;
+    padding-right:.5rem !important;
+  }
+}
+
+@media (max-width: 550px){
+  #moviePoster {
+    padding: 0.5rem !important;
+  }
+
+  .col-md-4 {
+    flex: 0 0 auto;
+    width: 40% !important;
+  }
+
+  .col-md-8 {
+    flex: 0 0 auto;
+    width: 60% !important;
+  }
+
+  .card-body{
+    padding-left:0px !important;
+    padding-right:0px !important;
+  }
+
+  .row>* {
+    flex-shrink: 0;
+    /* width: auto; */
+    max-width: 100%;
+    margin-top: var(--bs-gutter-y);
+  }
+
+  #actors {
+    padding-left:0px !important;
+    padding-right:0px !important;
+  }
+}
+
+@media (max-width: 430px){
+  .col-md-4 {
+    flex: 0 0 auto;
+    width: 55% !important;
+  }
+
+  .col-md-8 {
+    flex: 0 0 auto;
+    width: 45% !important;
+  }
+
+  #spacer{
+    display: none;
+  }
+
+  #ratingLabel, #ratingCol{
+    margin-top: 1.5rem;
+  }
+}

@@ -1,0 +1,44 @@
+[
+    {
+        "name" : "Terminator 2",
+        "date" : "7/2/1991",
+        "actors" : ["Arnold Schwarzenegger", "Linda Hamilton", "Edward Furlong"],
+        "poster" : "images/t2.jpg",
+        "rating" : 5
+    },
+    {
+        "name" : "Rocky IV",
+        "date" : "11/27/1985",
+        "actors" : ["Sylvester Stallone", "Carl Weathers", "Dolf Lundgren"],
+        "poster" : "images/rocky4.jpg",
+        "rating" : 5
+    },
+    {
+        "name" : "Rocky V",
+        "date" : "11/6/1990",
+        "actors" : ["Sylvester Stallone", "Tommy Morrison", "Talia Shire"],
+        "poster" : "images/rockyv.jpg",
+        "rating" : 4
+    },
+    {
+        "name" : "The Dark Knight",
+        "date" : "7/8/2008",
+        "actors" : ["Christian Bale", "Heath Ledger", "Aaron Eckhart", "Michael Caine"],
+        "poster" : "images/darkKnight.jpg",
+        "rating" : 5
+    },
+    {
+        "name" : "Skyfall",
+        "date" : "11/9/2012",
+        "actors" : ["Daniel Craig", "Javier Bardem", "Judi Dench", "Naomie Harris"],
+        "poster" : "images/skyfall.jpg",
+        "rating" : 4
+    },
+    {
+        "name" : "Spider-Man 3",
+        "date" : "5/4/2007",
+        "actors" : ["Tobey Maguire", "Kirsten Dunst", "Topher Grace"],
+        "poster" : "images/spiderman3.png",
+        "rating" : 3
+    }
+]
