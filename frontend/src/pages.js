@@ -54,6 +54,7 @@ export function Home({movies, setMovies}){
                                 headers: {
                                     'Content-Type': 'application/json',
                                 }
+                                
                             });
                             const body = await result.json();
                             console.log(body);
@@ -77,7 +78,7 @@ export function AddReview({movies, setMovies}){
                 <h2 style={{textAlign:"center"}}>Movie Review Form</h2>
             </div>
             <AddReviewForm
-                onNewReview={(name, date, actors, poster, rating) => {
+                onNewReview={(formData) => {
                     // const newReviews = [
                     // ...movies,
                     //     {
@@ -89,14 +90,19 @@ export function AddReview({movies, setMovies}){
                     //     }
                     // ];
                     // setMovies(newReviews);
-                    console.log(name);
-                    const removeMovie = async () =>{
+                    // const data = new FormData();
+                    // data.append('name', name);
+                    // data.append('date', date);
+                    // data.append('actors', actors);
+                    // data.append('poster', poster);
+                    // data.append('rating', rating);
+                    // console.log(poster);
+                    console.log(formData.get('poster'));
+                    
+                    const addMovie = async () =>{
                         const result = await fetch('/api/addMovie', {
                             method: "post",
-                            body: JSON.stringify({name, date, actors, poster, rating}),
-                            headers: {
-                                'Content-Type': 'application/json',
-                            }
+                            body: formData
                         });
                         const body = await result.json();
                         console.log(body);
@@ -104,7 +110,7 @@ export function AddReview({movies, setMovies}){
                             setMovies(body.movies);
                         }
                     }
-                    removeMovie();   
+                    addMovie();   
                 }}
             />
         </>

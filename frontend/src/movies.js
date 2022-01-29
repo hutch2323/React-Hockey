@@ -33,13 +33,19 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
 
     let releaseDate = new Date(date);
 
+    let posterImage = poster;
+    console.log(poster);
+    // if (posterImage.indexOf("images/") == -1){
+    //     posterImage = URL.createObjectURL(poster.file);
+    // }
+
     return (
         <>
             <div key={name} className="m-auto text-center p-3">
                 <div className="card border-dark m-auto" style={{maxWidth:"540px", backgroundColor:"#E6E6E6"}}>
                     <div className="row g-0 h-100">
                         <div className="col-md-4">
-                        <img id="moviePoster" className="p-3" src={poster} width="100%" height="100%" style={{margin: "auto"}}/>
+                        <img id="moviePoster" className="p-3" src={posterImage} width="100%" height="100%" style={{margin: "auto"}}/>
                         </div>
                         <div className="col-md-8">
                             <div className="card-body h-100 w-100"  style={{position:"relative", margin:"auto"}}>

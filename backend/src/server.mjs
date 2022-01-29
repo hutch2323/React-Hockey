@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MongoClient } from 'mongodb';
 import { request } from 'http';
+import multer from 'multer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,6 +19,40 @@ const __dirname = dirname(__filename);
 //     movieData = data;
 // });
 
+// const multer  = require('multer');
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, callback) => {
+//         callback(null, "./images/");
+//     },
+//     filename: (req, file, callback) => {
+//         callback(null, file.originalname);
+//     }
+// })
+
+// const upload = multer({storage: storage});
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, fileName)
+    }
+});
+
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
@@ -34,11 +69,15 @@ app.post('/api/addMovie', async (req, res) => {
     // req.params.name
     // console.log(req.params.name);
     try{
+        const url = req.protocol + '://' + req.get('host');
+        // upload.single(req.body.poster)
+        // console.log(req.body.get('name'));
+        console.log(req);
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
         const db = client.db("movies");
 
         //const movieInfo = await db.collection('movies').find({name:req.params.name}).toArray();
-        await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors, poster:req.body.poster, rating:req.body.rating});
+        //await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors, poster:url + '/images/' + req.body.poster.name, rating:req.body.rating});
 
         // console.log(movieInfo);
         const movieInfo = await db.collection('movies').find({}).toArray();
@@ -46,7 +85,7 @@ app.post('/api/addMovie', async (req, res) => {
         client.close();
     }
     catch (error) {
-        res.status(500).json({message: "Error connceting to db", error});
+        res.status(500).json({message: "Error connecting to db", error});
     }
 
 })
