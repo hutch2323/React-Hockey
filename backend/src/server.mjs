@@ -56,10 +56,12 @@ var upload = multer({
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
-app.use(bodyParser.urlencoded({extended:false}));
+// app.use(bodyParser.urlencoded({extended:false}));
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
+app.use(bodyParser.json({ limit: "50mb" }))
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 // app.get('/hello', (req, res) => { res.send("Hello")});
 
 // app.post('/hello', (req, res) => { res.send(`Hello there ${req.body.name}`)})
@@ -72,12 +74,12 @@ app.post('/api/addMovie', async (req, res) => {
         const url = req.protocol + '://' + req.get('host');
         // upload.single(req.body.poster)
         // console.log(req.body.get('name'));
-        console.log(req);
+        // console.log(req.body.poster);
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
         const db = client.db("movies");
 
         //const movieInfo = await db.collection('movies').find({name:req.params.name}).toArray();
-        //await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors, poster:url + '/images/' + req.body.poster.name, rating:req.body.rating});
+        await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors, poster:req.body.poster, rating:req.body.rating});
 
         // console.log(movieInfo);
         const movieInfo = await db.collection('movies').find({}).toArray();

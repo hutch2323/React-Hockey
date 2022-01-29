@@ -10,17 +10,41 @@ export function AddReviewForm({ onNewReview = f => f }){
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
 
+    const [state, setState] = useState({});
+
+    const getBase64 = file => {
+        return new Promise(resolve => {
+            let fileInfo;
+            let baseURL = "";
+            // Make new FileReader
+            let reader = new FileReader();
+
+            // Convert the file to base64 text
+            reader.readAsDataURL(file);
+
+            // on reader load somthing...
+            reader.onload = () => {
+                // Make a fileInfo Object
+                console.log("Called", reader);
+                baseURL = reader.result;
+                console.log(baseURL);
+                resolve(baseURL);
+            };
+            console.log(fileInfo);
+        });
+    };
+
     let formData = new FormData();
 
     const submit = evt => {
         evt.preventDefault();
-        // onNewReview(name, date, actors.split(", "), poster, rating);
-        formData.append('name', name);
-        formData.append('date', date);
-        formData.append('actors', actors);
-        formData.append('poster', poster);
-        formData.append('rating', rating);
-        onNewReview(formData);
+        onNewReview(name, date, actors.split(", "), poster, rating);
+        // formData.append('name', name);
+        // formData.append('date', date);
+        // formData.append('actors', actors);
+        // formData.append('poster', poster);
+        // formData.append('rating', rating);
+        // onNewReview(formData);
 
         
             
@@ -60,10 +84,36 @@ export function AddReviewForm({ onNewReview = f => f }){
 
     const onFileChange = evt => {
         // let file = evt.target.files[0];
-        // setPoster(URL.createObjectURL(file));
-        setPoster(evt.target.files[0]);
-        formData.append('file', evt.target.files[0]);
+        // // setPoster(URL.createObjectURL(file));
+        // setPoster(file);
+        // formData.append('file', evt.target.files[0]);
+        // console.log(evt.target.files[0]);
+        // console.log(poster);
         console.log(evt.target.files[0]);
+        // let { file } = state;
+
+        let fileToUpload = evt.target.files[0];
+
+        getBase64(fileToUpload)
+            .then(result => {
+                
+                fileToUpload["base64"] = result;
+                console.log("File Is", fileToUpload);
+                setState({
+                    file: fileToUpload,
+                    base64URL: result                    
+                });
+                console.log("Poster Data:", fileToUpload["base64"]);
+                setPoster(fileToUpload["base64"]);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        // setState({
+        //     file: evt.target.files[0]
+        // });
+
         console.log(poster);
     }
 

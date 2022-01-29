@@ -78,7 +78,7 @@ export function AddReview({movies, setMovies}){
                 <h2 style={{textAlign:"center"}}>Movie Review Form</h2>
             </div>
             <AddReviewForm
-                onNewReview={(formData) => {
+                onNewReview={(name, date, actors, poster, rating) => {
                     // const newReviews = [
                     // ...movies,
                     //     {
@@ -97,12 +97,15 @@ export function AddReview({movies, setMovies}){
                     // data.append('poster', poster);
                     // data.append('rating', rating);
                     // console.log(poster);
-                    console.log(formData.get('poster'));
+                    // console.log(formData.get('poster'));
                     
                     const addMovie = async () =>{
                         const result = await fetch('/api/addMovie', {
                             method: "post",
-                            body: formData
+                            body: JSON.stringify({name, date, actors, poster, rating}),
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
                         });
                         const body = await result.json();
                         console.log(body);
