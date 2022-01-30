@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import Toast from 'react-bootstrap/Toast';
 // import multer from 'multer';
+import Alert from "react-bootstrap/Alert"
+import Button from "react-bootstrap/Button"
+import { Movie } from "./movies";
 
 export function AddReviewForm({ onNewReview = f => f }){
     const [name, setName] = useState("");
@@ -10,7 +14,11 @@ export function AddReviewForm({ onNewReview = f => f }){
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
 
-    const [state, setState] = useState({});
+    // const [showA, setShowA] = useState(true);
+    // const [showB, setShowB] = useState(true);
+
+    // const toggleShowA = () => setShowA(!showA);
+    // const toggleShowB = () => setShowB(!showB);
 
     const getBase64 = file => {
         return new Promise(resolve => {
@@ -22,7 +30,7 @@ export function AddReviewForm({ onNewReview = f => f }){
             // Convert the file to base64 text
             reader.readAsDataURL(file);
 
-            // on reader load somthing...
+            // on reader load something...
             reader.onload = () => {
                 // Make a fileInfo Object
                 console.log("Called", reader);
@@ -34,37 +42,41 @@ export function AddReviewForm({ onNewReview = f => f }){
         });
     };
 
-    let formData = new FormData();
+    const formData = new FormData();
 
     const submit = evt => {
         evt.preventDefault();
         onNewReview(name, date, actors.split(", "), poster, rating);
-        // formData.append('name', name);
-        // formData.append('date', date);
-        // formData.append('actors', actors);
-        // formData.append('poster', poster);
-        // formData.append('rating', rating);
+        // formData.append("name", "hello");
+        // formData.append('date', '10/20/2020');
+        // formData.append('actors', 'Me, you, someone else');
+        // formData.append('poster', 'blah');
+        // formData.append('rating', '4');
         // onNewReview(formData);
-
         
-            
-            // const body = await result.json();
-            // console.log(body);
+        // const addMovie = async () =>{
+        //     const result = await 
+            // fetch('/api/addMovie', {
+            //     method: "post",
+            //     body: formData,
+            //     // headers: {
+            //     //     'Content-Type': 'multipart/form-data',
+            //     // }
+            // });
+        //     const body = await result.json();
+        //     console.log(body);
+        // }
+        // addMovie();
             // if (body.message == "Success"){
             //     setMovies(body.movies);
             // }
-        
-        // addMovie();
-        // fetch('/api/addMovie', {
-        //     method: "post",
-        //     body: formData
-        // });
 
         setName("");
         setDate(null);
         setActors([]);
         setPoster({});
         setRating(0);
+        // navigate('/', { state: {newMovie: name,}});
         navigate('/');
     }
 
@@ -84,13 +96,13 @@ export function AddReviewForm({ onNewReview = f => f }){
 
     const onFileChange = evt => {
         // let file = evt.target.files[0];
-        // // setPoster(URL.createObjectURL(file));
+        // // // setPoster(URL.createObjectURL(file));
         // setPoster(file);
-        // formData.append('file', evt.target.files[0]);
+        // // formData.append('poster', file);
         // console.log(evt.target.files[0]);
-        // console.log(poster);
-        console.log(evt.target.files[0]);
-        // let { file } = state;
+        // // console.log(poster);
+        // console.log("Poster", poster);
+        // // let { file } = state;
 
         let fileToUpload = evt.target.files[0];
 
@@ -99,10 +111,6 @@ export function AddReviewForm({ onNewReview = f => f }){
                 
                 fileToUpload["base64"] = result;
                 console.log("File Is", fileToUpload);
-                setState({
-                    file: fileToUpload,
-                    base64URL: result                    
-                });
                 console.log("Poster Data:", fileToUpload["base64"]);
                 setPoster(fileToUpload["base64"]);
             })
@@ -143,7 +151,7 @@ export function AddReviewForm({ onNewReview = f => f }){
 
     return(
         <>
-            <form name="addReview" className="pt-3 container border border-dark" onSubmit={submit} style={{textAlign:"left", maxWidth:"720px"}}>
+            <form name="addReview" encType="multipart/form-data" className="pt-3 container border border-dark" onSubmit={submit} style={{textAlign:"left", maxWidth:"720px"}}>
                 <div className="mb-4">
                     <label className="form-label fw-bold" htmlFor="name">Movie Name:</label>
                     <input 
@@ -226,7 +234,21 @@ export function AddReviewForm({ onNewReview = f => f }){
                 <div className="pb-3" style={{textAlign:"center"}}>
                     <button className="btn btn-primary" type="submit" value="Submit">Add Review</button>
                 </div>
+                
+                {/* <Toast show={showA} onClose={toggleShowA}>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+        </Toast>        */}
             </form>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossOrigin="anonymous"></script>
         </>
     );
 }

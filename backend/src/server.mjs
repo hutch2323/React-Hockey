@@ -72,6 +72,9 @@ app.post('/api/addMovie', async (req, res) => {
     // console.log(req.params.name);
     try{
         const url = req.protocol + '://' + req.get('host');
+        // console.log("req", req);
+        // console.log("poster", req.body.poster);
+        console.log(req.body);
         // upload.single(req.body.poster)
         // console.log(req.body.get('name'));
         // console.log(req.body.poster);
