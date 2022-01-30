@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home movies={movies} setMovies={setMovies}/>}/>
+        <Route path="/" element={<Home movies={movies} setMovies={setMovies} />}/>
         <Route path="/addReview" element={<AddReview movies={movies} setMovies={setMovies} />}/>
       </Routes>
     </div> 

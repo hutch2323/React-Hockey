@@ -5,7 +5,9 @@ import { AddReviewForm } from "./addReviewForm";
 import bootstrap from "bootstrap";
 import './App.css';
 import { Helmet } from 'react-helmet';
-
+import Alert from 'react-bootstrap/Alert';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function NavigationBar(){
     return(
@@ -31,7 +33,13 @@ function NavigationBar(){
 }
 
 export function Home({movies, setMovies}){
+    // const [addAlert, setAddAlert] = useState(false);
+    const [removeAlert, setRemoveAlert] = useState(false);
+    const [movieName, setMovieName] = useState("");
 
+    // if (props.location.state != null){
+    //     console.log(props.location.state.newMovie);
+    // }
     return(
         <>
             <div>
@@ -41,7 +49,12 @@ export function Home({movies, setMovies}){
             </div>
             <NavigationBar />
             {/* <h1>Movie Reviews</h1> */}
-
+            {/* <Alert variant="success" show={addAlert} onClose={() => setAddAlert(false)} dismissible>
+                <Alert.Heading> has been Added!</Alert.Heading>
+            </Alert> */}
+            <Alert variant="danger" show={removeAlert} onClose={() => setRemoveAlert(false)} dismissible>
+                <Alert.Heading>{movieName} has been removed!</Alert.Heading>
+            </Alert>
             <MovieList 
                 movies={movies} 
                 onRemoveMovie = {
@@ -62,7 +75,13 @@ export function Home({movies, setMovies}){
                                 setMovies(body.movies);
                             }
                         }
-                        removeMovie();                                         
+                        removeMovie();
+                        if (removeAlert){
+                            setMovieName(movieName);
+                        } else {
+                            setMovieName(movieName);
+                            setRemoveAlert(!removeAlert); 
+                        }                
                     }
                 } 
             />
@@ -71,9 +90,18 @@ export function Home({movies, setMovies}){
 }
 
 export function AddReview({movies, setMovies}){
+    const [alert, setAlert] = useState(false);
     return(
         <>
             <NavigationBar />
+            {/* <Alert variant="success" show={alert} onClose={() => setAlert(false)} dismissible>
+                <Alert.Heading>{movieName} has been added!</Alert.Heading>
+                <p>
+                    Change this and that and try again. Duis mollis, est non commodo
+                    luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                    Cras mattis consectetur purus sit amet fermentum.
+                </p>
+            </Alert> */}
             <div className="mt-4 p-2 bg-dark text-white" style={{width:"100%", maxWidth:"720px", margin:"auto"}}>
                 <h2 style={{textAlign:"center"}}>Movie Review Form</h2>
             </div>
@@ -105,7 +133,8 @@ export function AddReview({movies, setMovies}){
                             body: JSON.stringify({name, date, actors, poster, rating}),
                             headers: {
                                 'Content-Type': 'application/json',
-                            }
+                            },
+                        
                         });
                         const body = await result.json();
                         console.log(body);
@@ -113,7 +142,7 @@ export function AddReview({movies, setMovies}){
                             setMovies(body.movies);
                         }
                     }
-                    addMovie();   
+                    addMovie();  
                 }}
             />
         </>
