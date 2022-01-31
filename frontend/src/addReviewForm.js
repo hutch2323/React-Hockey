@@ -46,13 +46,14 @@ export function AddReviewForm({ onNewReview = f => f }){
 
     const submit = evt => {
         evt.preventDefault();
-        onNewReview(name, date, actors.split(", "), poster, rating);
-        // formData.append("name", "hello");
-        // formData.append('date', '10/20/2020');
-        // formData.append('actors', 'Me, you, someone else');
-        // formData.append('poster', 'blah');
-        // formData.append('rating', '4');
-        // onNewReview(formData);
+        // onNewReview(name, date, actors.split(", "), poster, rating);
+        let actorArray = actors.split(",");
+        formData.append("name", name);
+        formData.append('date', date);
+        formData.append('actors', actorArray);
+        formData.append('rating', rating);
+        console.log(formData.get("poster"))
+        onNewReview(formData);
         
         // const addMovie = async () =>{
         //     const result = await 
@@ -104,25 +105,27 @@ export function AddReviewForm({ onNewReview = f => f }){
         // console.log("Poster", poster);
         // // let { file } = state;
 
-        let fileToUpload = evt.target.files[0];
+        formData.append("poster", evt.target.files[0]);
 
-        getBase64(fileToUpload)
-            .then(result => {
+        // setPoster(fileToUpload);
+
+        // getBase64(fileToUpload)
+        //     .then(result => {
                 
-                fileToUpload["base64"] = result;
-                console.log("File Is", fileToUpload);
-                console.log("Poster Data:", fileToUpload["base64"]);
-                setPoster(fileToUpload["base64"]);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        //         fileToUpload["base64"] = result;
+        //         console.log("File Is", fileToUpload);
+        //         console.log("Poster Data:", fileToUpload["base64"]);
+        //         setPoster(fileToUpload["base64"]);
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     });
 
         // setState({
         //     file: evt.target.files[0]
         // });
 
-        console.log(poster);
+        console.log(formData.get("poster"));
     }
 
     // const formData = new FormData();

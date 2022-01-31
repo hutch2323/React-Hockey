@@ -19,11 +19,7 @@ export function MovieList({ movies = [], onRemoveMovie = f => f }){
 }
 
 export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
-    // console.log(name, date, actors, poster, rating);
     const [open, setOpen] = useState(true);
-    
-    // let open = true;
-    // const setOpen = () => {open = !open};
 
 
     let stars = [];
@@ -41,13 +37,6 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
 
     let releaseDate = new Date(date);
 
-    // let posterImage = new Image();
-    // console.log(poster);
-    // if (poster.indexOf("images/") == -1){
-    //     posterImage.src = `data:image/jpeg;base64,${poster}`
-    // } else {
-    //     posterImage.src = poster
-    // }
 
     const fadeOutReview = (evt, name) => {
         setOpen(!open);
@@ -55,17 +44,18 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
 
     const fadeInReview = name => {
         // this will ensure that the proceeding review will not be faded out when the currently faded element/component is removed
-        onRemove(name);
+        
         setTimeout( () => {
+            onRemove(name);
             setOpen(!open);
         }, 100);
     }
 
     return (
         <>
-            <Fade key={name} in={open} onExited={()=>fadeInReview(name)}>
+            <Fade key={name+"key"} in={open} onExited={()=>fadeInReview(name)}>
                 <div key={name} id={`card${name}`} className="m-auto text-center p-3">
-                    <div id={name} className="card border-dark m-auto" style={{maxWidth:"540px", backgroundColor:"#E6E6E6"}}>
+                    <div id={name} className="card border-dark m-auto rounded" style={{maxWidth:"540px", backgroundColor:"#E6E6E6", boxShadow:"0 0.5rem 1rem rgba(0,0,0,.5)"}}>
                         <div className="row g-0 h-100">
                             <div className="col-md-4">
                             <img id="moviePoster" className="p-3" src={poster} width="100%" height="100%" style={{margin: "auto"}}/>
@@ -90,7 +80,7 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
                                         {stars.map( (star, i) => {return <FaStar key={i} color="red"/>})}
                                         {greyStars.map( (star, i) => { return <FaStar key={i} color="grey"/>})}   
                                     </div>
-                                    <button onClick={evt => fadeOutReview(evt, name)}
+                                    <button id="deleteButton" onClick={evt => fadeOutReview(evt, name)}
                                         aria-controls={`card${name}`}
                                         aria-expanded={open}
                                     >
