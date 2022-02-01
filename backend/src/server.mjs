@@ -19,17 +19,6 @@ const __dirname = dirname(__filename);
 //     movieData = data;
 // });
 
-// const multer  = require("multer");
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, callback) => {
-//         callback(null, "./images/");
-//     },
-//     filename: (req, file, callback) => {
-//         callback(null, file.originalname);
-//     }
-// })
-
 const storage = multer.diskStorage({
     // destination: "./build/images/",
     destination: "src/build/images/",
@@ -50,17 +39,6 @@ const storageJSON = multer.diskStorage({
 
 const uploadMovies = multer({});
 const upload = multer({storage: storage});
-// var upload = multer({
-//     storage: storage,
-//     fileFilter: (req, file, cb) => {
-//         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-//             cb(null, true);
-//         } else {
-//             cb(null, false);
-//             return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-//         }
-//     }
-// });
 
 const app = express();
 app.use(express.static(path.join(__dirname, '/build')));
@@ -68,17 +46,13 @@ app.use(express.static(path.join(__dirname, '/build')));
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 
-// app.post('/api/addMovie', async (req, res) => {
 const uploadFiles = async (req, res) => {
     try{
         console.log(req.body);
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
         const db = client.db("movies");
 
-        //const movieInfo = await db.collection('movies').find({name:req.params.name}).toArray();
-        await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors.split(', '), poster:req.file.path.slice(req.file.path.indexOf("\\images")), rating:req.body.rating});
-        // await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors.split(', '), poster:req.file.path, rating:req.body.rating});
-        // console.log(movieInfo);
+        await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors.split(', '), poster:"images/"+req.file.filename, rating:req.body.rating});
         const movieInfo = await db.collection('movies').find({}).toArray();
         res.status(200).json({message:"Success", movies: movieInfo});
         client.close();
@@ -88,34 +62,6 @@ const uploadFiles = async (req, res) => {
     }
 
 }
-
-// const uploadMovieData = async (req, res) => {
-//     try{
-//         console.log("File content:")
-//         console.log(req.body);
-//         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
-//         const db = client.db("movies");
-
-//         //const movieInfo = await db.collection('movies').find({name:req.params.name}).toArray();
-//         let movieData = undefined;
-//         fs.readFile(req.file, "utf8", (err, data) => {
-//             console.log(err)
-//             console.log("File Contents:")
-//             console.log(data)
-//             movieData = data;
-//         });
-//         // await db.collection('movies').insertMany(movieData);
-//         // await db.collection('movies').insertOne({name:req.body.name, date:req.body.date, actors:req.body.actors.split(', '), poster:req.file.path, rating:req.body.rating});
-//         // console.log(movieInfo);
-//         // const movieInfo = await db.collection('movies').find({}).toArray();
-//         // res.status(200).json({message:"Success", movies: movieInfo});
-//         client.close();
-//     }
-//     catch (error) {
-//         res.status(500).json({message: "Error connecting to db", error});
-//     }
-
-// }
 
 app.post('/api/addMovie', upload.single("poster"), uploadFiles);
 
