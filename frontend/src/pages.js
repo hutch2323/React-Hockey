@@ -6,10 +6,10 @@ import bootstrap from "bootstrap";
 import './App.css';
 import { Helmet } from 'react-helmet';
 import Alert from 'react-bootstrap/Alert';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function NavigationBar(){
+function NavigationBar({setNewMovie}){
     return(
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,7 +21,7 @@ function NavigationBar(){
                                     <Link className="nav-item nav-link active" to="/">Home</Link>
                                 </li>
                                 <li className="nav-item fs-5">
-                                    <Link className="nav-item nav-link active" to="/addReview">Add Review</Link>
+                                    <Link className="nav-item nav-link active" to="/addReview" onClick={()=>setNewMovie(false)}>Add Review</Link>
                                 </li>
                                 {/* <li className="nav-item fs-5">
                                     <Link className="nav-item nav-link active" to="/uploadFile">Add Review</Link>
@@ -35,14 +35,22 @@ function NavigationBar(){
     )
 }
 
-export function Home({movies, setMovies}){
-    // const [addAlert, setAddAlert] = useState(false);
+export function Home({movies, newMovie, setNewMovie, setMovies}){
+    const [showAlert, setShowAlert] = useState(newMovie);
     const [removeAlert, setRemoveAlert] = useState(false);
     const [movieName, setMovieName] = useState("");
 
     // if (props.location.state != null){
     //     console.log(props.location.state.newMovie);
     // }
+    let newMovieName = '';
+    if(newMovie){
+        newMovieName = movies[movies.length-1].name;
+    }
+
+    // useEffect(() => {
+    //     // setNewMovie(false);
+    // }, [showAlert]);
     return(
         <>
             <div>
@@ -50,11 +58,12 @@ export function Home({movies, setMovies}){
                     <title>Movie Reviews</title>
                 </Helmet>
             </div>
-            <NavigationBar />
+            <NavigationBar setNewMovie={setNewMovie}/>
             {/* <h1>Movie Reviews</h1> */}
-            {/* <Alert variant="success" show={addAlert} onClose={() => setAddAlert(false)} dismissible>
-                <Alert.Heading> has been Added!</Alert.Heading>
-            </Alert> */}
+
+            <Alert variant="success" show={newMovie} onClose={() => {setNewMovie(false)}} dismissible>
+                <Alert.Heading>{newMovieName} has been Added!</Alert.Heading>
+            </Alert>
             <Alert variant="danger" show={removeAlert} onClose={() => setRemoveAlert(false)} dismissible>
                 <Alert.Heading>{movieName} has been removed!</Alert.Heading>
             </Alert>
@@ -92,11 +101,11 @@ export function Home({movies, setMovies}){
     );
 }
 
-export function AddReview({movies, setMovies}){
+export function AddReview({movies, newMovie, setNewMovie, setMovies}){
     const [alert, setAlert] = useState(false);
     return(
         <>
-            <NavigationBar />
+            <NavigationBar setNewMovie={setNewMovie}/>
             {/* <Alert variant="success" show={alert} onClose={() => setAlert(false)} dismissible>
                 <Alert.Heading>{movieName} has been added!</Alert.Heading>
                 <p>
@@ -143,6 +152,7 @@ export function AddReview({movies, setMovies}){
                         console.log(body);
                         if (body.message == "Success"){
                             setMovies(body.movies);
+                            setNewMovie(true);
                         }
                     }
                     addMovie();  
