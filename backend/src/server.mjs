@@ -100,7 +100,7 @@ app.post('/api/removeMovie', async (req, res) => {
         const movieInfo = await db.collection('movies').findOne({name:req.body.name})
         console.log(movieInfo);
         //fs.unlink("./src/build"+movieInfo.poster, (err) => {
-        fs.unlink(movieInfo.poster, (err) => {
+        fs.unlink("src/build/"+movieInfo.poster, (err) => {
             if (err) {
               console.error(err)
               return
