@@ -17,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home movies={movies} setMovies={setMovies} />}/>
         <Route path="/addReview" element={<AddReview movies={movies} setMovies={setMovies} />}/>
+        {/* <Route path="/uploadFile" element={<UploadFile movies={movies} setMovies={setMovies} />}/> */}
       </Routes>
     </div> 
   );

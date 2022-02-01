@@ -22,7 +22,10 @@ function NavigationBar(){
                                 </li>
                                 <li className="nav-item fs-5">
                                     <Link className="nav-item nav-link active" to="/addReview">Add Review</Link>
-                                </li>	
+                                </li>
+                                {/* <li className="nav-item fs-5">
+                                    <Link className="nav-item nav-link active" to="/uploadFile">Add Review</Link>
+                                </li>		 */}
                             </ul>
                         </div>
                     </div>
@@ -148,3 +151,31 @@ export function AddReview({movies, setMovies}){
         </>
     );
 }
+
+// export function UploadFile({movies, setMovies}){
+//     return(
+//         <>
+//             <NavigationBar />
+//             <div className="mt-4 p-2 bg-dark text-white" style={{width:"100%", maxWidth:"720px", margin:"auto"}}>
+//                 <h2 style={{textAlign:"center"}}>Upload Movie Reviews File</h2>
+//             </div>
+//             <AddReviewForm
+//                 onNewReview={(formData) => {
+                    
+//                     const addMovies = async () =>{
+//                         const result = await fetch('/api/addMovies', {
+//                             method: "post",
+//                             body: formData,
+//                         });
+//                         const body = await result.json();
+//                         console.log(body);
+//                         if (body.message == "Success"){
+//                             setMovies(body.movies);
+//                         }
+//                     }
+//                     addMovies();  
+//                 }}
+//             />
+//         </>
+//     );
+// }
