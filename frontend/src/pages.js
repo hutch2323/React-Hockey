@@ -88,11 +88,12 @@ export function Home({movies, newMovie, setNewMovie, setMovies}){
                             }
                         }
                         removeMovie();
+                        setNewMovie(false);
                         if (removeAlert){
                             setMovieName(movieName);
                         } else {
                             setMovieName(movieName);
-                            setRemoveAlert(!removeAlert); 
+                            setRemoveAlert(!removeAlert);
                         }                
                     }
                 } 
