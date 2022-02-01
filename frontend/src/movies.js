@@ -69,7 +69,11 @@ export function Movie({name, date, actors, poster, rating, onRemove = f => f}) {
                                     <p id="actors" className="p-4 card-text mb-0"><b>Actors: </b>
                                         {actors.map( (actor, i) => {
                                             if (i + 1 == actors.length){
-                                                return <span key={i}>and {actor}</span>
+                                                if (actors.length == 1){
+                                                    return <span key={i}>{actor}</span>
+                                                } else {
+                                                    return <span key={i}>and {actor}</span>
+                                                }
                                             } else {
                                                 return <span key={i}>{actor}, </span>
                                             }
