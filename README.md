@@ -1,4 +1,4 @@
-# CP3540-Assignment2-MovieReviews
+# React-Hockey Project
 Full-stack MERN application (MongoDB, Express, React and Node.js)
 
 # Getting Started with Create React App
