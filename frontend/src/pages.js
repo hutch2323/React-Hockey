@@ -35,7 +35,7 @@ function NavigationBar({setNewMovie}){
     )
 }
 
-export function Home({movies, newMovie, setNewMovie, setMovies}){
+export function Home({date, setDate, movies, newMovie, setNewMovie, setMovies}){
     const [showAlert, setShowAlert] = useState(newMovie);
     const [removeAlert, setRemoveAlert] = useState(false);
     const [movieName, setMovieName] = useState("");
@@ -67,6 +67,18 @@ export function Home({movies, newMovie, setNewMovie, setMovies}){
             <Alert variant="danger" show={removeAlert} onClose={() => setRemoveAlert(false)} dismissible>
                 <Alert.Heading>{movieName} has been removed!</Alert.Heading>
             </Alert>
+            <div className="col-auto pt-3">
+                        <label className="fw-bold pe-3" htmlFor="date">Date:</label>
+                        
+                        <input 
+                            value={date}
+                            onChange = {evt => setDate(evt.target.value)}
+                            type="date" 
+                            id="date" 
+                            name="date" 
+                            required
+                        />
+                    </div>
             <MovieList 
                 movies={movies} 
                 onRemoveMovie = {

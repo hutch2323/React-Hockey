@@ -11,6 +11,7 @@ import multer from 'multer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const api = `https://statsapi.web.nhl.com/api/v1`;
 
 // let movieData = undefined;
 // fs.readFile("./data/movies.json", "utf8", (err, data) => {
@@ -144,18 +145,41 @@ app.get('/api/oneMovie/:name', async (req, res) => {
 
 })
 
+const getTeamData = async () => {
+    try{
+        const response = await fetch('https://statsapi.web.nhl.com/api/v1/teams/');
+        const json = await response.json();
+        return json.teams
+    } catch(e){
+        res.status(500).json({message: "Error connceting to db", e});
+    }
+}
+
 app.get('/api/movies', async (req, res) => {
     // res.send(movieData);
     try{
-        const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
-        const db = client.db("movies");
+        // const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
+        // const db = client.db("movies");
 
-        const movieInfo = await db.collection('movies').find({}).toArray();
-        console.log(movieInfo);
-        res.status(200).json(movieInfo);
-        client.close();
-    }
-    catch (error) {
+        // const movieInfo = await db.collection('movies').find({}).toArray();
+        // console.log(movieInfo);
+        // res.status(200).json(movieInfo);
+        // client.close();
+
+    // const json = await getTeamData();
+    // console.log(await fetch('https://statsapi.web.nhl.com/api/v1/teams/'));
+    // const json = await response.json();
+
+    // const teamInfo = null;
+    // await fetch('https://statsapi.web.nhl.com/api/v1/teams/')
+    //   .then((response) => response.json())
+    //   .then(teamInfo)
+
+    // console.log(teamInfo);
+
+    res.status(200).json({message:"hello"});
+
+    }catch (error) {
         res.status(500).json({message: "Error connceting to db", error});
     }
 
