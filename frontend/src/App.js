@@ -3,10 +3,20 @@ import { Routes, Route } from "react-router-dom";
 import { Home, AddReview } from './pages';
 import { useState, useEffect } from 'react';
 
+const getDateString = () => {
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, '0');
+  let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  let yyyy = today.getFullYear();
+
+  today = yyyy + "-" + mm + '-' + dd;
+  return today;
+}
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [newMovie, setNewMovie] = useState(false);
-  const [date, setDate] = useState("2022-01-28")
+  const [date, setDate] = useState(getDateString)
 
   useEffect(async () => {
       try{
