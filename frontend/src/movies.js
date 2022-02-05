@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTrash, FaStar, FaVenusDouble } from "react-icons/fa"; 
 import Fade from "react-bootstrap/Fade"
 import Alert from "react-bootstrap/Alert"
@@ -18,8 +18,53 @@ export function MovieList({ movies = [], onRemoveMovie = f => f }){
     );
 }
 
+async function getGameStatus(gamePk, teams, status){
+    try{
+        let url = `https://statsapi.web.nhl.com/api/v1/game/${gamePk}/linescore`;
+        const response = await fetch(url);
+        const json = await response.json();
+        console.log(json);
+        console.log(teams.away.team.name + " vs. " + teams.home.team.name + ":  " + json.currentPeriodOrdinal);
+      //   console.log(json.dates[0].games);
+      //   let endStatus = json.dates[0].games;
+        // teams.sort(function (a, b) {
+        //   if (a["name"] > b["name"]) {
+        //       return 1;
+        //   } else {
+        //       return -1;
+        //   }
+      // });
+          return json.currentPeriodOrdinal;
+      } catch(e){
+          return "";
+      }
+};
+
 export function Movie({gamePk, status, teams, onRemove = f => f}) {
     const [open, setOpen] = useState(true);
+    const [gameStatus, setGameStatus] = useState(getGameStatus(gamePk, status, teams))
+
+    // useEffect(async () => {
+    //     try{
+    //       let url = `https://statsapi.web.nhl.com/api/v1/game/${gamePk}/linescore`;
+    //       const response = await fetch(url);
+    //       const json = await response.json();
+    //       console.log(json);
+    //       console.log(teams.away.team.name + " vs. " + teams.home.team.name + ":  " + json.currentPeriodOrdinal);
+    //     //   console.log(json.dates[0].games);
+    //     //   let endStatus = json.dates[0].games;
+    //       // teams.sort(function (a, b) {
+    //       //   if (a["name"] > b["name"]) {
+    //       //       return 1;
+    //       //   } else {
+    //       //       return -1;
+    //       //   }
+    //     // });
+    //         setGameStatus(json.currentPeriodOrdinal);
+    //     } catch(e){
+    //         setGameStatus("");
+    //     }
+    // }, []);
 
     const colors = [[24,"#F47A38","#000000"], // Anaheim Ducks
     [53,"#8C2633", "#5F259F"], // Arizona Coyotes
@@ -83,46 +128,48 @@ export function Movie({gamePk, status, teams, onRemove = f => f}) {
         }, 100);
     }
 
+    function checkGameStatus(){
+        console.log(status.statusCode);
+        if (status.statusCode == "7"){
+            return(
+                <>
+                    <div className="col-md-9">
+                        <div className="row g-0 d-flex">
+                            <div className="col-md-8">
+                                <p className="mt-3">{teams.away.team.name}</p>
+                            </div>
+                            <div className="col-md-4">
+                                <p className="mt-3">{teams.away.score}</p>
+                            </div>
+                            <div className="col-md-8">
+                                <p>{teams.home.team.name}</p>
+                            </div>
+                            <div className="col-md-4">
+                                <p>{teams.home.score}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3 d-flex">
+                        <p className="m-auto d-flex">{gameStatus}</p>
+                        {/* {() => {
+                            return <p>{gameStatus.currentPeriodOrdinal}</p>;
+                        }} */}
+                    </div>
+                </>
+            )
+        } else {
+            return <div>{}</div>
+        }
+    }
+
     return (
         <>
             <Fade key={gamePk+"key"} in={open} onExited={()=>fadeInReview(gamePk)}>
                 <div key={gamePk} id={`card${gamePk}`} className="m-auto text-center p-3">
-                <div id={gamePk} className="card border-dark m-auto rounded" style={{maxWidth:"540px", backgroundColor:"#E6E6E6", boxShadow:"0 0.5rem 1rem rgba(0,0,0,.5)"}}>
+                    <div id={gamePk} className="card border-dark m-auto rounded" style={{maxWidth:"540px", backgroundColor:"#E6E6E6", boxShadow:"0 0.5rem 1rem rgba(0,0,0,.5)"}}>
                         <div className="row g-0 h-100">
-                            <div className="col-md-9">
-                                <div className="row g-0 d-flex">
-                                    <div className="col-md-8">
-                                        <p className="mt-3">{teams.away.team.name}</p>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <p className="mt-3">{teams.away.score}</p>
-                                    </div>
-                                    <div className="col-md-8">
-                                        <p>{teams.home.team.name}</p>
-                                    </div>
-                                    <div className="col-md-4">
-                                        <p>{teams.home.score}</p>
-                                    </div>
-                                    {/* <img id="moviePoster" className="p-3" src={poster} width="100%" height="100%" style={{margin: "auto"}}/> */}
-                                </div>
-                            </div>
-                            <div className="col-md-3 d-flex">
-                                <p className="m-auto d-flex">Final</p>
-                            </div>
+                            {checkGameStatus()}
                             
-                            
-                            {/* <div className="">
-                                <div className="card-body h-100 w-100"  style={{position:"relative", margin:"auto"}}>
-                                    <h5 className="card-title mb-0">{gamePk}</h5>
-                                    <p key={gamePk} className="card-title">
-                                        
-                                    </p>
-                                
-                                    <div className="card-text w-100 pb-4"  style={{margin:"auto"}}>  
-                                    </div>
-
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>
