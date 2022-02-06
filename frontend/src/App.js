@@ -26,13 +26,21 @@ function App() {
         console.log(json);
         console.log(json.dates[0].games);
         let teams = json.dates[0].games;
-        // teams.sort(function (a, b) {
-        //   if (a["name"] > b["name"]) {
-        //       return 1;
-        //   } else {
-        //       return -1;
-        //   }
-      // });
+
+
+        for (let team of teams){
+          console.log(team);
+          let url = `https://statsapi.web.nhl.com/api/v1/game/${team.gamePk}/linescore`;
+          const response = await fetch(url);
+          const json = await response.json();
+          console.log(json);
+          // console.log(teams.away.team.name + " vs. " + teams.home.team.name + ":  " + json.currentPeriodOrdinal);
+
+          let ordinal = json.currentPeriodOrdinal;
+          team.currentPeriodOrdinal = ordinal
+          console.log(team)
+        }
+        console.log(teams);
         setMovies(teams);
       } catch(e){
           setMovies([]);

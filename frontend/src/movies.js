@@ -34,15 +34,16 @@ async function getGameStatus(gamePk, teams, status){
         //       return -1;
         //   }
       // });
-          return json.currentPeriodOrdinal;
+        const gameStatus = json.currentPeriodOrdinal;
+        return gameStatus
       } catch(e){
-          return "";
+        return "";
       }
 };
 
-export function Movie({gamePk, status, teams, onRemove = f => f}) {
+export function Movie({gamePk, gameDate, status, teams, currentPeriodOrdinal, onRemove = f => f}) {
     const [open, setOpen] = useState(true);
-    const [gameStatus, setGameStatus] = useState(getGameStatus(gamePk, status, teams))
+    // const [gameStatus, setGameStatus] = useState("");
 
     // useEffect(async () => {
     //     try{
@@ -51,15 +52,6 @@ export function Movie({gamePk, status, teams, onRemove = f => f}) {
     //       const json = await response.json();
     //       console.log(json);
     //       console.log(teams.away.team.name + " vs. " + teams.home.team.name + ":  " + json.currentPeriodOrdinal);
-    //     //   console.log(json.dates[0].games);
-    //     //   let endStatus = json.dates[0].games;
-    //       // teams.sort(function (a, b) {
-    //       //   if (a["name"] > b["name"]) {
-    //       //       return 1;
-    //       //   } else {
-    //       //       return -1;
-    //       //   }
-    //     // });
     //         setGameStatus(json.currentPeriodOrdinal);
     //     } catch(e){
     //         setGameStatus("");
@@ -128,12 +120,36 @@ export function Movie({gamePk, status, teams, onRemove = f => f}) {
         }, 100);
     }
 
+    function checkPeriodOrdinal(){
+        if ((currentPeriodOrdinal != "1st") && (currentPeriodOrdinal != "2nd") && (currentPeriodOrdinal != "3rd")){
+            return (
+                <p className="m-auto">{currentPeriodOrdinal}</p>
+            );
+        }
+    }
+
+    // let gameTime = gameDate.substring(gameDate.indexOf("T")+1, gameDate.indexOf("Z"))
+    let gameTime = new Date(gameDate);
+    console.log(gameTime);
+    // gameTime.setTime(gameTime.getTime() + gameTime.getTimezoneOffset()*60*1000);
+    console.log((gameTime.getHours()-12)+":"+gameTime.getMinutes());
+    let timeString = "";
+    if (gameTime.getHours() > 12){
+        timeString = (gameTime.getHours()-12)+":"+gameTime.getMinutes() + " PM"
+    } else if (gameTime.getHours() == 12){
+        timeString = gameTime.getHours()+":"+gameTime.getMinutes() + " PM"
+    } else {
+        timeString = gameTime.getHours()+":"+gameTime.getMinutes() + " AM"
+    }
+    console.log("Game time: " + timeString);
+
     function checkGameStatus(){
         console.log(status.statusCode);
-        if (status.statusCode == "7"){
+        // console.log(gameStatus);
+        if (status.statusCode >= 5){
             return(
                 <>
-                    <div className="col-md-9">
+                    {/* <div className="col-md-9">
                         <div className="row g-0 d-flex">
                             <div className="col-md-8">
                                 <p className="mt-3">{teams.away.team.name}</p>
@@ -150,15 +166,97 @@ export function Movie({gamePk, status, teams, onRemove = f => f}) {
                         </div>
                     </div>
                     <div className="col-md-3 d-flex">
-                        <p className="m-auto d-flex">{gameStatus}</p>
-                        {/* {() => {
-                            return <p>{gameStatus.currentPeriodOrdinal}</p>;
-                        }} */}
+                        <div className="row g-0 d-flex">
+                            <div className="col-md-12">
+                                <p className="m-auto d-flex">Final</p>
+                            </div>
+                            {checkPeriodOrdinal()}
+                        </div>
+                    </div> */}
+
+                    <div className="row w-100">
+                        <div className="col-9 m-auto">
+                            <div className="row">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.away.team.name}</p>
+                                </div>
+                                <div className="col-2 m-auto">
+                                    <p className="m-auto">{teams.away.score}</p>
+                                </div>
+                            </div>
+                            <div className="row d-flex aligns-items-center justify-content-center">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.home.team.name}</p>
+                                </div>
+                                <div className="col-2 m-auto">
+                                    <p className="m-auto">{teams.home.score}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-3 m-auto">
+                            <div className="row">
+                                <p className="m-auto">Final</p>
+                                {checkPeriodOrdinal()}
+                            </div>
+                        </div>
+                    </div>
+                   
+                </>
+            )
+        } else if (status.statusCode >= "3"){
+            return (
+                <>
+                    <div className="row w-100">
+                        <div className="col-9 m-auto">
+                            <div className="row">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.away.team.name}</p>
+                                </div>
+                                <div className="col-2 m-auto">
+                                    <p className="m-auto">{teams.away.score}</p>
+                                </div>
+                            </div>
+                            <div className="row d-flex aligns-items-center justify-content-center">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.home.team.name}</p>
+                                </div>
+                                <div className="col-2 m-auto">
+                                    <p className="m-auto">{teams.home.score}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-3 m-auto">
+                            <div className="row">
+                                {checkPeriodOrdinal()}
+                            </div>
+                        </div>
                     </div>
                 </>
             )
-        } else {
-            return <div>{}</div>
+        } else{
+            return (
+                <>                    
+                    <div className="row w-100">
+                        <div className="col-9 m-auto">
+                            <div className="row">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.away.team.name}</p>
+                                </div>
+                            </div>
+                            <div className="row d-flex aligns-items-center justify-content-center">
+                                <div className="col-10 m-auto">
+                                    <p className="m-auto">{teams.home.team.name}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-3 m-auto">
+                            <div className="row">
+                                {timeString}
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )
         }
     }
 
@@ -166,10 +264,9 @@ export function Movie({gamePk, status, teams, onRemove = f => f}) {
         <>
             <Fade key={gamePk+"key"} in={open} onExited={()=>fadeInReview(gamePk)}>
                 <div key={gamePk} id={`card${gamePk}`} className="m-auto text-center p-3">
-                    <div id={gamePk} className="card border-dark m-auto rounded" style={{maxWidth:"540px", backgroundColor:"#E6E6E6", boxShadow:"0 0.5rem 1rem rgba(0,0,0,.5)"}}>
-                        <div className="row g-0 h-100">
+                    <div id={gamePk} className="card border-dark m-auto rounded" style={{width:"350px", height:"100px", backgroundColor:"#E6E6E6", boxShadow:"0 0.5rem 1rem rgba(0,0,0,.5)"}}>
+                        <div className="w-100 h-100 d-flex aligns-items-center justify-content-center">
                             {checkGameStatus()}
-                            
                         </div>
                     </div>
                 </div>
